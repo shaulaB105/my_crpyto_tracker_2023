@@ -1,4 +1,5 @@
 import {Link, Route, Switch, useLocation, useParams, useRouteMatch} from "react-router-dom";
+import {Helmet} from "react-helmet";
 
 import CoinChart from "./tabs/CoinChart";
 import Price, {IPriceProps} from "./tabs/Price";
@@ -154,7 +155,12 @@ function Coin () {
     const {state} = useLocation<IRouteState>();
 
     const {isLoading:infoLoading, data:coinInfo} = useQuery<InfoData>(["info", coinId], ()=>getCoinInfo(coinId));
-    const {isLoading:priceLoading, data:coinPrice} = useQuery<PriceData>(["price", coinId], ()=>getCoinPrice(coinId));
+    const {isLoading:priceLoading, data:coinPrice} = useQuery<PriceData>(
+        ["price", coinId],
+        ()=>getCoinPrice(coinId),
+        {
+            refetchInterval : 600000,
+        });
 
 //    const infoLoading = true;
 //    const priceLoading = true;
@@ -164,18 +170,24 @@ function Coin () {
     const loading = infoLoading || priceLoading;
 
     const path = {
-        CHART : `/${coinId}/chart`,
-        PRICE : `/${coinId}/price`
+        CHART : `/my_crpyto_tracker_2023/${coinId}/chart`,
+        PRICE : `/my_crpyto_tracker_2023/${coinId}/price`
     }
     const chartMatch = useRouteMatch(path.CHART);
     const priceMatch = useRouteMatch(path.PRICE);
 
     return (
         <Wrapper>
+            <Helmet>
+                <title>{state?.coinName ?
+                    state.coinName
+                    : (loading ? "Loading..." : coinInfo?.name)}
+                </title>
+            </Helmet>
             <Header>
                 <Route>
                     <Home>
-                        <Link to="/">
+                        <Link to="/my_crpyto_tracker_2023/">
                             <HomeIcon />
                         </Link>
                     </Home>
@@ -199,7 +211,7 @@ function Coin () {
                         </OverviewItem>
                         <OverviewItem>
                             <span>Price</span>
-                            <span>{coinPrice?.quotes.USD?.price.toFixed(2)}</span>
+                            <span>{coinPrice?.quotes?.USD?.price.toFixed(2)}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{coinInfo?.description}</Description>
@@ -228,7 +240,7 @@ function Coin () {
                             <CoinChart coinId={coinId}/>
                         </Route>
                         <Route path={path.PRICE}>
-                            <Price USD={ coinPrice?.quotes.USD}/>
+                            <Price USD={ coinPrice?.quotes?.USD}/>
                         </Route>
 
                     </Switch>

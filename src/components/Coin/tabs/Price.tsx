@@ -65,8 +65,6 @@ export interface IPriceProps {
 }
 
 function Price ( {USD}: {USD: IPriceProps|undefined} ) {
-    console.log(USD);
-
     const priceToStr = (price:number|string|undefined):string => {
         return price ? price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
             : "";

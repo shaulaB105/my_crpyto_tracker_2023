@@ -5,7 +5,10 @@ export function getCoins(){
 }
 
 export function getCoinInfo(coinId:string) {
-    return fetch(`${BASEURL}/coins/${coinId}`).then(res=>res.json());
+    return fetch(`${BASEURL}/coins/${coinId}`).then(res=>{
+        console.log(`getCoinInfo`);
+        return res.json()
+    });
 }
 export function getCoinPrice(coinId:string) {
     return fetch(`${BASEURL}/tickers/${coinId}`).then(res=>{

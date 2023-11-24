@@ -5,12 +5,12 @@ import Coin from "../components/Coin/Coin";
 
 function Router (){
     return (
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <BrowserRouter>
             <Switch>
-                <Route path="/:coinId">
+                <Route path="/my_crpyto_tracker_2023/:coinId">
                     <Coin />
                 </Route>
-                <Route path="/">
+                <Route path="/my_crpyto_tracker_2023/">
                     <Coins />
                 </Route>
             </Switch>

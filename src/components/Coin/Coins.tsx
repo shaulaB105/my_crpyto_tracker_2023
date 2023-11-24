@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {useQuery} from "react-query";
 import {getCoins} from "../../api/coinpaprika";
 import {Link} from "react-router-dom";
+import {Helmet} from "react-helmet";
 
 const Wrapper = styled.div`
   padding: 0 20px;
@@ -76,6 +77,11 @@ function Coins () {
 
     return (
         <Wrapper>
+            <Helmet>
+                <title>
+                    {(isLoading ? "Loading..." : "My Crpyto Tracker")}
+                </title>
+            </Helmet>
             <Header>
                 <Title>My Crpyto Tracker</Title>
             </Header>
@@ -89,7 +95,7 @@ function Coins () {
                     data?.slice(0, 100).map(coin=>
                         <ListItem key={coin.id}>
                             <Link to={{
-                                pathname : `/${coin.id}`,
+                                pathname : `/my_crpyto_tracker_2023/${coin.id}`,
                                 state : {
                                     coinName : coin.name
                                 }
