@@ -8,5 +8,12 @@ export function getCoinInfo(coinId:string) {
     return fetch(`${BASEURL}/coins/${coinId}`).then(res=>res.json());
 }
 export function getCoinPrice(coinId:string) {
-    return fetch(`${BASEURL}/tickers/${coinId}`).then(res=>res.json());
+    return fetch(`${BASEURL}/tickers/${coinId}`).then(res=>{
+        console.log(`getCoinPrice`);
+        return res.json();
+    });
+}
+
+export function getNicoEx(coinId:string){
+    return fetch(`https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`).then(res=>res.json());
 }

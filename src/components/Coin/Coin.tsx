@@ -1,11 +1,13 @@
 import {Link, Route, Switch, useLocation, useParams, useRouteMatch} from "react-router-dom";
-import styled from "styled-components";
-import {useQuery} from "react-query";
-
-import {getCoinInfo, getCoinPrice} from "../../api/coinpaprika";
 
 import CoinChart from "./tabs/CoinChart";
-import Price from "./tabs/Price";
+import Price, {IPriceProps} from "./tabs/Price";
+
+import {useQuery} from "react-query";
+import {getCoinInfo, getCoinPrice} from "../../api/coinpaprika";
+
+import styled from "styled-components";
+import HomeIcon from '@mui/icons-material/Home';
 
 const Wrapper = styled.div`
   padding: 0 20px;
@@ -26,10 +28,13 @@ const Title = styled.h1`
   font-size: 48px;
 `;
 const Home = styled.div`
-  position: relative;
-  top:0;
-  left:0;
+  position: fixed;
+  top: 20px;
+  left:30px;
   color : ${props=>props.theme.accent};
+  a{
+    font-size : 28px
+  }
 `;
 
 const Loader = styled.span`
@@ -140,39 +145,21 @@ interface PriceData {
     first_data_at: string;
     last_updated: string;
     quotes: {
-        USD:{
-            ath_date: string;
-            ath_price: number;
-            market_cap: number;
-            market_cap_change_24h: number;
-            percent_change_1h: number;
-            percent_change_1y: number;
-            percent_change_6h: number;
-            percent_change_7d: number;
-            percent_change_12h: number;
-            percent_change_15m: number;
-            percent_change_24h: number;
-            percent_change_30d: number;
-            percent_change_30m: number;
-            percent_from_price_ath: number;
-            price: number;
-            volume_24h: number;
-            volume_24h_change_24h: number;
-        }
+        USD:IPriceProps|undefined
     }
 }
 
 function Coin () {
     const {coinId} = useParams<IRouteParams>();
     const {state} = useLocation<IRouteState>();
-/*
+
     const {isLoading:infoLoading, data:coinInfo} = useQuery<InfoData>(["info", coinId], ()=>getCoinInfo(coinId));
     const {isLoading:priceLoading, data:coinPrice} = useQuery<PriceData>(["price", coinId], ()=>getCoinPrice(coinId));
-    */
-    const infoLoading = true;
-    const priceLoading = true;
-    const coinInfo = {name:"infoName", rank:0, symbol:coinId,description:"nothing"};
-    const coinPrice = {quotes:{USD:{price:12903.21398}},total_supply:21123, max_supply:1231};
+
+//    const infoLoading = true;
+//    const priceLoading = true;
+//    const coinInfo = {name:"infoName", rank:0, symbol:coinId,description:"nothing"};
+//    const coinPrice = {quotes:{USD:{price:12903.21398}},total_supply:21123, max_supply:1231};
 
     const loading = infoLoading || priceLoading;
 
@@ -186,9 +173,13 @@ function Coin () {
     return (
         <Wrapper>
             <Header>
-                <Home>
-                    t
-                </Home>
+                <Route>
+                    <Home>
+                        <Link to="/">
+                            <HomeIcon />
+                        </Link>
+                    </Home>
+                </Route>
                 <Title>{state?.coinName ?
                     state.coinName
                     : (loading ? "Loading..." : coinInfo?.name)}
@@ -208,7 +199,7 @@ function Coin () {
                         </OverviewItem>
                         <OverviewItem>
                             <span>Price</span>
-                            <span>{coinPrice?.quotes.USD.price}</span>
+                            <span>{coinPrice?.quotes.USD?.price.toFixed(2)}</span>
                         </OverviewItem>
                     </Overview>
                     <Description>{coinInfo?.description}</Description>
@@ -234,10 +225,10 @@ function Coin () {
 
                     <Switch>
                         <Route path={path.CHART}>
-                            <CoinChart/>
+                            <CoinChart coinId={coinId}/>
                         </Route>
                         <Route path={path.PRICE}>
-                            <Price/>
+                            <Price USD={ coinPrice?.quotes.USD}/>
                         </Route>
 
                     </Switch>
