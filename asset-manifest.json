@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/my_crpyto_tracker_2023/static/js/main.d5d472e7.js",
+    "main.js": "/my_crpyto_tracker_2023/static/js/main.ef5a3fec.js",
     "index.html": "/my_crpyto_tracker_2023/index.html",
-    "main.d5d472e7.js.map": "/my_crpyto_tracker_2023/static/js/main.d5d472e7.js.map"
+    "main.ef5a3fec.js.map": "/my_crpyto_tracker_2023/static/js/main.ef5a3fec.js.map"
   },
   "entrypoints": [
-    "static/js/main.d5d472e7.js"
+    "static/js/main.ef5a3fec.js"
   ]
 }
