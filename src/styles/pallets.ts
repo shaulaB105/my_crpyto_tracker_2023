@@ -84,6 +84,7 @@ export const pallets = {
         choco : "#633122",
     },
     gray : {
+        toggle : "#808080",
         duhka : "#757E8B",
         deepsea : "#5A6078",
         leaderdeep : "#40404B",

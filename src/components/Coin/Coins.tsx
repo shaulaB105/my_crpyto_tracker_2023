@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import {useQuery} from "react-query";
-import {getCoins} from "../api/coinpaprika";
-import Coin from "./Coin";
+import {getCoins} from "../../api/coinpaprika";
 import {Link} from "react-router-dom";
 
 const Wrapper = styled.div`
@@ -28,6 +27,7 @@ const Loader = styled.span`
   margin: 5px;
   font-style: italic;
   font-weight: 600;
+  color : ${props=>props.theme.txt};
 `;
 
 const CoinList = styled.ul`
@@ -39,12 +39,12 @@ const ListItem = styled.li`
   margin-bottom: 10px;
   border-radius: 5px;
   font-weight: 600;
-  transition: color .2s ease-in;
+  transition: color .1s ease-in;
   &:hover{
     background-color: ${props=>props.theme.hvrbg};
   }
   a{
-    transition: color .2s ease-in;
+    transition: color .1s ease-in;
     display: flex;
     align-items: center;
     padding : 16px;
@@ -70,6 +70,10 @@ interface ICoin {
 }
 function Coins () {
     const {isLoading, data} = useQuery<ICoin[]>("allCoins", getCoins);
+
+    //const isLoading = true;
+    //const data:ICoin[] = [];
+
     return (
         <Wrapper>
             <Header>
@@ -84,7 +88,12 @@ function Coins () {
                 <CoinList>{
                     data?.slice(0, 100).map(coin=>
                         <ListItem key={coin.id}>
-                            <Link to={`/${coin.id}`}>
+                            <Link to={{
+                                pathname : `/${coin.id}`,
+                                state : {
+                                    coinName : coin.name
+                                }
+                            }}>
                                 <ItemIcon src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
                                 {coin.name} &rarr;
                             </Link>

@@ -1,20 +1,22 @@
-import {DefalutTheme} from "styled-components";
+import {DefaultTheme} from "styled-components";
 import {pallets} from "./pallets";
 
-export const light:DefalutTheme = {
+export const light:DefaultTheme = {
     bg : pallets.white.saints,
     hvrbg : pallets.white.christmas,
     txt : pallets.black.saints,
     accent : pallets.red.one,
     assist : pallets.white.base,
-    toggle : "dark"
+    tip : pallets.white.snowflower,
+    toggle : pallets.gray.toggle
 };
 
-export const dark:DefalutTheme = {
+export const dark:DefaultTheme = {
     bg : pallets.black.abaddon,
     hvrbg : pallets.gray.tolvishdeep,
     txt : pallets.white.crowsilver,
     accent : pallets.blue.sora,
     assist : pallets.gray.leaderdeep,
-    toggle : "light"
+    tip : pallets.gray.realdeep,
+    toggle : pallets.gray.duhka
 };
