@@ -1,7 +1,9 @@
-import {useRecoilState, useRecoilValue} from "recoil";
-import {categoriesState, ICategory, viewState} from "../../atoms";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {categoriesState, ICategory, toDoState, viewState} from "../../atoms";
 
 import styled from "styled-components";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import React from "react";
 const Tabs = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -36,12 +38,43 @@ const Tab = styled.div<{$isactive : boolean}>`
     margin-left: auto;
   }
 `;
+const DeleteBtn = styled.button<{$isactive:boolean}>`
+  background-color: transparent;
+  border: none;
+  color : ${props=>props.theme.txt};
+  &:hover{
+    cursor: pointer;
+    color: ${props=>props.theme.accent}
+  }
+  display: ${props=>props.$isactive ? "" : "none"};
+`
+
 function CategoryTabs(){
-    const categories = useRecoilValue(categoriesState);
+    const [categories, setCategories] = useRecoilState(categoriesState);
+    const setTodos = useSetRecoilState(toDoState);
     const [view, setView] = useRecoilState(viewState);
 
     const onClick = ({l, v}:ICategory)=>{
         setView({l, v});
+    }
+    const onClickDelete = (evt:React.MouseEvent<HTMLButtonElement>) =>{
+        if(window.confirm("Delete this category and all toDos...")){
+            setCategories(prev=>{
+                const idx = categories.findIndex(c=>(view.l === c.l)&&(view.v === c.v));
+                const newCates = [...prev.slice(0, idx), ...prev.slice(idx+1)];
+                localStorage.setItem("categories", JSON.stringify(newCates));
+                return newCates;
+            });
+            setTodos(prev=>{
+                const filtered = prev.filter(td=>(view.l !== td.category.l)&&(view.v !== td.category.v));
+                localStorage.setItem("toDos", JSON.stringify(filtered));
+                return filtered;
+            });
+            setView({
+                l : "To Do",
+                v : "TO_DO"
+            });
+        }
     }
 
     return (
@@ -57,6 +90,14 @@ function CategoryTabs(){
                     </Tab>
                 ))
             }
+            <DeleteBtn
+                $isactive={("TO_DO" !== view.v)
+                    && ("DOING" !== view.v)
+                    && ("DONE" !== view.v)
+                    && ("addCategory" !== view.v)
+            }
+                onClick={onClickDelete}
+            ><DeleteForeverIcon/></DeleteBtn>
             <Tab
                 key={"addCategory"}
                 $isactive={view.v === "addCategory"}

@@ -64,12 +64,18 @@ function CreateWork(){
         setValue
     } = useForm<IForm>();
     const addWork = ({toDo}:IForm) => {
-        setToDos((prev)=>[
-            {
-                txt :toDo,
-                id: Date.now(),
-                category: view
-            }, ...prev]);
+        setToDos((prev)=>{
+            const added = [
+                {
+                    txt :toDo,
+                    id: Date.now(),
+                    category: view
+                }, ...prev];
+
+            localStorage.setItem("toDos", JSON.stringify(added));
+
+            return added;
+        });
         setValue("toDo", "");
     }
     return (

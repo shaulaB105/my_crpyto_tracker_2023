@@ -31,7 +31,7 @@ const RaúlBarreraSelect = styled.select`
   border: 0;
   outline: 0;
 
-  padding: 10px 20px 10px 10px;
+  padding: 10px;
   background: ${props=>props.theme.bg};
   color : ${props=>props.theme.txt};
   border-radius: 8px;
@@ -47,6 +47,10 @@ const RaúlBarreraSelect = styled.select`
   option {
     color: inherit;
     background-color: var(--option-bg);
+  }
+
+  option[value="none"][disabled] {
+    display: none;
   }
 `
 
@@ -70,6 +74,9 @@ function ToDoItem({txt, id, category}:IToDo){
             text,
             value
         } = evt.currentTarget.selectedOptions[0];
+        if("none" === text)
+            return;
+
         setTodos((prev)=>{
             const idx = prev.findIndex(prevTodo=> id === prevTodo.id);
             const newToDo = {
@@ -80,21 +87,39 @@ function ToDoItem({txt, id, category}:IToDo){
                     v : value
                 }
             }
+            const changed = [...prev.slice(0, idx), newToDo, ...prev.slice(idx+1)];
 
-            return [...prev.slice(0, idx), newToDo, ...prev.slice(idx+1)];
+            localStorage.setItem("toDos", JSON.stringify(changed));
+
+            return changed;
         })
 
     };
 
     const onClick = (evt:React.MouseEvent<HTMLButtonElement>) =>{
-        console.log(evt)
+        setTodos((prev)=>{
+            const idx = prev.findIndex(prevTodo=> id === prevTodo.id);
+            const removed = [...prev.slice(0, idx), ...prev.slice(idx+1)];
+
+            localStorage.setItem("toDos", JSON.stringify(removed));
+
+            return removed;
+        })
     }
 
     return (
         <ToDoLi>
             <DeleteBtn onClick={onClick}><DeleteForeverIcon/></DeleteBtn>
             <span>{txt}</span>
-            <RaúlBarreraSelect onInput={onInput}>
+            <RaúlBarreraSelect
+                value={"none"}
+                onInput={onInput}
+            >
+                <option
+                    key={`${id}_none`}
+                    value={"none"}
+                    disabled
+                >{category.l}</option>
                 {
                     categories.map(cate=>(
                         (view.v !== cate.v) ? (

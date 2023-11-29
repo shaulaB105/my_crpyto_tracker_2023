@@ -1,11 +1,12 @@
-
-import CreateWork from "./CreateWork";
-
-import styled from "styled-components";
-import CategoryTabs from "./CategoryTabs";
 import {useRecoilValue} from "recoil";
 import {toDoSelector, viewState} from "../../atoms";
+
+import CreateWork from "./CreateWork";
+import CategoryTabs from "./CategoryTabs";
 import ToDoItem from "./ToDoItem";
+import AddCategory from "./AddCategory";
+
+import styled from "styled-components";
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -30,10 +31,11 @@ function ToDoList(){
             <CreateWork />
             <CategoryTabs />
             <ViewSection>{
-
-                toDos.map(todo=>(
-                    <ToDoItem key={todo.id} {...todo} />
-                ))
+                "addCategory" ===  view?.v
+                    ? <AddCategory/>
+                    : toDos.map(todo=>(
+                        <ToDoItem key={todo.id} {...todo} />
+                    ))
             }
             </ViewSection>
         </Wrapper>

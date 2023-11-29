@@ -3,8 +3,8 @@ import React, {useEffect} from 'react';
 import {createGlobalStyle, ThemeProvider} from "styled-components";
 import {dark, light} from "./styles/theme";
 
-import {useRecoilState} from "recoil";
-import {isDarkState} from "./atoms";
+import {useRecoilState, useSetRecoilState} from "recoil";
+import {categoriesState, isDarkState, toDoState} from "./atoms";
 
 import ToDoList from "./components/todos/ToDoList";
 import ModeToggle from "./components/ModeToggle";
@@ -82,6 +82,8 @@ const GlobalStyle = createGlobalStyle`
 
 function App() {
     const [isDark, setIsDark] = useRecoilState(isDarkState);
+    const setTodos = useSetRecoilState(toDoState);
+    const setCategories = useSetRecoilState(categoriesState);
 
     useEffect(()=>{
         const themeLocal = localStorage.getItem("theme");
@@ -89,6 +91,13 @@ function App() {
             ? ("dark" === themeLocal )
             : false
         );
+
+        const toDosLocal = localStorage.getItem("toDos");
+        setTodos(toDosLocal ? JSON.parse(toDosLocal) : []);
+
+        const categoriesLocal = localStorage.getItem("categories");
+        setCategories( prev => categoriesLocal ? JSON.parse(categoriesLocal) : prev);
+
     }, []);
 
     return (
