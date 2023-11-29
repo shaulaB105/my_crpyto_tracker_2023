@@ -23,6 +23,7 @@
     "react-apexcharts": "^1.4.1",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-hook-form": "^7.48.2",
     "react-query": "^3.39.3",
     "react-router-dom": "^5.3.4",
     "react-scripts": "5.0.1",
@@ -57,5 +58,5 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://shaulaB105.github.io/my_crpyto_tracker_2023"
+  "homepage": "https://shaulaB105.github.io/my_react_master_2023"
 }

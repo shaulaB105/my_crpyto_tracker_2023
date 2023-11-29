@@ -9,5 +9,6 @@ declare module 'styled-components'{
         assist : string;
         tip : string;
         toggle : string;
+        slctbg : string;
     }
 }

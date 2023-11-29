@@ -1,8 +1,8 @@
+import {useRecoilState} from "recoil";
+import {isDarkState} from "../atoms";
+
 import styled from "styled-components";
-
-import React, {useContext, useEffect} from "react";
-
-import {ThemeContext} from "../context/ThemeProvider"
+import React from "react";
 
 const WrapToggle = styled.label`
   position: fixed;
@@ -21,7 +21,7 @@ const ToggleInput = styled.input`
   border: 2px solid ${props => props.theme.toggle};
   border-radius: 1.5em;
   width: 3em;
-  height: 1.50em;
+  height: 1.5em;
 
   transition: all .1s linear;
   &:hover{
@@ -47,18 +47,20 @@ const ToggleInput = styled.input`
   }
 `
 
-
 function ModeToggle(){
-
-    const {theme, onChangeTheme} = useContext(ThemeContext);
+    const [isDark, setIsDark] = useRecoilState(isDarkState);
+    const onChange = (evt:React.FormEvent<HTMLInputElement>) => {
+        localStorage.setItem("theme", evt.currentTarget.checked ? "dark" : "light");
+        setIsDark(evt.currentTarget.checked);
+    }
 
     return(
         <WrapToggle>
             <ToggleInput
                 role="switch"
                 type="checkbox"
-                onChange={onChangeTheme}
-                checked = {"dark" === theme}
+                onChange={onChange}
+                checked = {isDark}
             />
         </WrapToggle>
     )

@@ -5,6 +5,8 @@ const NomadCoders = styled.footer`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 5em;
+  width: 100%;
 
   span{
     margin-right: 3.5px;

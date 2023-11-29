@@ -1,9 +1,15 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
-import Router from "./routes/Router";
-import {ReactQueryDevtools} from "react-query/devtools";
+import {createGlobalStyle, ThemeProvider} from "styled-components";
+import {dark, light} from "./styles/theme";
 
-import {createGlobalStyle} from "styled-components";
+import {useRecoilState} from "recoil";
+import {isDarkState} from "./atoms";
+
+import ToDoList from "./components/todos/ToDoList";
+import ModeToggle from "./components/ModeToggle";
+import NomadCoders from "./components/NomadCoders";
+
 const GlobalStyle = createGlobalStyle`
   /* 
       http://meyerweb.com/eric/tools/css/reset/ 
@@ -66,7 +72,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Noto Sans KR', 'Source Sans 3', sans-serif;
     background-color: ${props=>props.theme.bg};
-    color: ${props=>props.theme.font};
+    color: ${props=>props.theme.txt};
   }
   a {
     text-decoration: none;
@@ -75,13 +81,26 @@ const GlobalStyle = createGlobalStyle`
 `
 
 function App() {
-  return (
-    <>
-        <GlobalStyle />
-        <Router />
-        <ReactQueryDevtools initialIsOpen={true} />
-    </>
-  );
+    const [isDark, setIsDark] = useRecoilState(isDarkState);
+
+    useEffect(()=>{
+        const themeLocal = localStorage.getItem("theme");
+        setIsDark(themeLocal
+            ? ("dark" === themeLocal )
+            : false
+        );
+    }, []);
+
+    return (
+        <>
+            <GlobalStyle theme={isDark ? dark : light} />
+            <ThemeProvider theme={isDark ? dark : light} >
+                <ModeToggle />
+                <ToDoList />
+                <NomadCoders />
+            </ThemeProvider>
+        </>
+    );
 }
 
 export default App;
